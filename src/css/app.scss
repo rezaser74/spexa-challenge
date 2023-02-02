@@ -1,1 +1,18 @@
 // app global css in SCSS form
+body{
+  background: aliceblue;
+}
+
+.container{
+  max-width: 1200px;
+  width: 100%;
+  margin: 5em auto;
+}
+
+.box{
+  gap: 2em;
+}
+
+.btn{
+  flex: 1;
+}

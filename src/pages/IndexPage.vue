@@ -28,7 +28,7 @@ export default defineComponent({
   },
   methods: {
     loginUser () {
-      this.$router.push('/home')
+      this.$router.push('/directories')
     }
   }
 })

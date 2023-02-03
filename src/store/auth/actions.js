@@ -1,4 +1,4 @@
-export async function registerUser ({ commit }, form) {
+export async function registerUser ({ commit, state }, form) {
   let res = await fetch('https://challenge.spexa.dev/user/login', {
     method: 'POST',
     mode: 'cors',
@@ -11,7 +11,7 @@ export async function registerUser ({ commit }, form) {
   try {
     res = await res.json()
     // set Email to username
-    console.log(res)
+
     await commit('auth/setter', ['token', res.data.access_token], { root: true })
     // set token to refresh token
     await commit('auth/setter', ['refresh', res.data.refresh_token], { root: true })
@@ -26,6 +26,7 @@ export async function registerUser ({ commit }, form) {
       // root directory id
       await commit('directories/setter', ['id', res.data.root_directory_id], { root: true })
     }
+    console.log(state)
     return res
   } catch (e) {
     console.log(e)
@@ -41,15 +42,17 @@ export async function registerUser ({ commit }, form) {
 * in directories
 */
 export async function refreshToken ({ state, commit }) {
-  console.log('hello')
+  console.log(state)
   let res = await fetch('https://challenge.spexa.dev/user/refresh', {
     method: 'POST',
     mode: 'cors',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      Accept: 'application/json'
     },
+
     body: JSON.stringify({
-      refresh_token: state.refresh
+      refresh_token: `${state.refresh}`
     })
   })
   res = await res.json()
@@ -58,8 +61,8 @@ export async function refreshToken ({ state, commit }) {
     commit('setter', ['refresh', res.data.refresh_token])
     // callback as target request
   } catch (e) {
-    commit('setter', ['token', ''])
-    commit('setter', ['refresh', ''])
+    // commit('setter', ['token', ''])
+    // commit('setter', ['refresh', ''])
     return res.message
   }
 }

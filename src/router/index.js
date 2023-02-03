@@ -33,16 +33,16 @@ export default route(function ({ store }) {
     const id = store.state.directories.id
     if (to.name === 'directories') {
       if (!token) {
-        console.log('no token')
         await Router.push('/')
       } else {
         if (id) {
           await store.dispatch('directories/getDirectory', id)
         } else if (!id) {
           const list = JSON.parse(localStorage.getItem('list'))
-          store.commit('directories/setter', 'directorList', list)
+          store.commit('directories/setter', ['directoryList', list])
           const search = list.find(route => route.title.includes(to.params.path)).id
-          store.commit('example/setId', search)
+          console.log('search', search)
+          await store.commit('directories/setter', ['id', search], { root: true })
           await store.dispatch('directories/getDirectory', search)
         }
       }

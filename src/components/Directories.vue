@@ -13,7 +13,7 @@
                 <q-icon name="more_horiz" label="Basic Menu"></q-icon>
                 <q-menu>
                   <q-list style="min-width: 100px">
-                    <q-item @click="$store.commit('example/setId',folder.id)" clickable v-close-popup>
+                    <q-item @click="openFolder(folder.id,folder.title)" clickable v-close-popup>
                       <q-item-section>
       <span>
             <q-icon name="open_in_new"/>
@@ -22,7 +22,7 @@
                       </q-item-section>
                     </q-item>
                     <q-separator/>
-                    <q-item @click="$store.commit('example/setId',folder.id);openDel=!openDel" clickable v-close-popup>
+                    <q-item @click="()=>{openDel=!openDel;id=folder.id;title=folder.title}" clickable v-close-popup>
                       <q-item-section>
 <span>
             <q-icon name="delete"></q-icon>
@@ -41,7 +41,7 @@
             <q-icon class="cursor-pointer" name="add" size="2em" @click="openAdd=!openAdd"></q-icon>
 
             <create-modal :show="openAdd"/>
-            <delete-modal :show="openDel" :id="id"/>
+            <delete-modal :show="openDel" :id="id" :title="title"/>
           </div>
         </div>
       </q-page>
@@ -75,16 +75,19 @@ export default {
     return {
       openAdd: false,
       openDel: true,
-      id: ''
+      id: '',
+      title: ''
     }
   },
   methods: {
-    deleteFolder (id) {
-      console.log(id)
-    },
-    openFolder (id) {
-      console.log(id)
+
+    openFolder (id, title) {
+      this.$store.dispatch('directories/getDirectory', id)
+      this.$store.commit('directories/pushToList', { title, id })
+      this.$router.push(`/directories/${title}`)
     }
+  },
+  mounted () {
   }
 }
 </script>

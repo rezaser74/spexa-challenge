@@ -3,10 +3,10 @@
     <q-dialog v-model="isOpen">
       <div class="flex column justify-center bg-white q-px-xl q-py-lg q-py-sm q-col-gutter-y-md box">
         <span class="text-h6 self-start">Create Directory</span>
-        <q-input v-model="name" dense outlined placeholder="title"/>
+        <q-input v-model="title" dense outlined placeholder="title"/>
         <div class="row q-gutter-sm full-width">
           <q-btn v-close-popup color="black btn" dense outline>cancel</q-btn>
-          <q-btn @click.prevent="$store.dispatch('directories/CreateDirectory', this.name, this.id)" class="q-px-xl" color="black" dense >Create</q-btn>
+          <q-btn :disable="!title" @click.prevent="create" class="q-px-xl confirm" color="black" dense>Create</q-btn>
         </div>
       </div>
     </q-dialog>
@@ -24,7 +24,7 @@ export default {
   data () {
     return {
       isOpen: false,
-      name: '',
+      title: '',
       open: true
     }
   },
@@ -40,13 +40,20 @@ export default {
   },
   methods: {
     async create () {
-      console.log('hi')
+      const id = this.id
+      const title = this.title
+
+      await this.$store.dispatch('directories/CreateDirectory', { id, title })
     }
   }
 }
 </script>
 
 <style scoped>
+.confirm {
+  z-index: 10;
+}
+
 .box {
   min-width: 20vw;
   gap: 2em;

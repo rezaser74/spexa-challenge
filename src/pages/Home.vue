@@ -2,8 +2,12 @@
   <q-layout class="flex column full-width q-col-gutter-y-xl layout">
     <the-header/>
     <!--if there is no directory-->
-    <CreateDirectory v-if=" !folders.directories.length"/>
-    <Directories v-else :level="level" :folders="folders.directories" @add="addFolder()"/>
+    <Directories v-if="directories.length" :level="level" :folders="directories" :key="directories"
+                 transition-show="jump-down"
+                 transition-hide="jump-up"
+    />
+    <CreateDirectory v-else :key="directories"/>
+
   </q-layout>
 
 </template>
@@ -25,18 +29,6 @@ export default {
     return {
       level: 1,
       folders: {
-        directories: [
-          // {
-          //   id: 'JUZyOtKXSYW3-y2zpLf8rw',
-          //   title: 'test',
-          //   parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
-          // },
-          // {
-          //   id: 'JUZyOtKXSYW3-y2zpLf8rw',
-          //   title: 'music',
-          //   parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
-          // }
-        ],
         directoryList: []
       }
     }
@@ -45,15 +37,9 @@ export default {
   computed: {
     ...mapGetters({
       access_token: 'auth/AccessToken',
-      getDirectoryList: 'directories/getDirList'
+      getDirectoryList: 'directories/getDirList',
+      directories: 'directories/getDirectories'
     })
-  },
-  methods: {
-    // ...mapActions({
-    //   directory: 'directories/getDirectory'
-    // })
-  },
-  beforeMount () {
   }
 }
 </script>

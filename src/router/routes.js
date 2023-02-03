@@ -8,7 +8,9 @@ const routes = [
         component: () => import('pages/IndexPage.vue')
       },
       {
-        path: '/directories',
+        params: true,
+        path: '/directories/:path*',
+        name: 'directories',
         component: () => import('pages/Home.vue')
       }
     ]

@@ -2,5 +2,6 @@
 //
 // }
 export function getUser (state) {
-  return state.username
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+  return userInfo.username || state.username
 }

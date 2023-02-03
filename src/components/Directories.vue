@@ -2,6 +2,7 @@
   <q-page-container>
 
     <div class="container">
+      <bread-crumb/>
       <q-page>
         <div class="row  full-height">
 
@@ -53,11 +54,13 @@
 
 import CreateModal from 'components/CreateModal.vue'
 import DeleteModal from 'components/DeleteModal.vue'
+import BreadCrumb from 'components/BreadCrumb.vue'
 
 export default {
 
   name: 'DirComponent',
   components: {
+    BreadCrumb,
     DeleteModal,
     CreateModal
   },

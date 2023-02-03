@@ -1,9 +1,8 @@
 export default function () {
   return {
     //
-    username: 'rezaser3774@gmail.com',
+    username: '',
     parent_id: '',
     child_id: ''
-
   }
 }

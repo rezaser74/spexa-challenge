@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 
 import example from './module-example'
 import auth from './auth'
+import directories from './directories'
 
 /*
  * If not building with SSR mode, you can
@@ -17,7 +18,8 @@ export default store(function (/* { ssrContext } */) {
   return createStore({
     modules: {
       example,
-      auth
+      auth,
+      directories
     },
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only

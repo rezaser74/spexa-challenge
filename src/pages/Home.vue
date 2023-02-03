@@ -9,7 +9,7 @@
       </q-toolbar>
     </q-header>
     <!--if there is no directory-->
-    <CreateDirectory v-if="!folders.directories.length"/>
+    <CreateDirectory v-if=" !folders.directories.length"/>
     <Directories v-else :level="level" :folders="folders.directories" @add="addFolder()"/>
   </q-layout>
 
@@ -48,24 +48,25 @@ export default {
 
   computed: {
     ...mapGetters({
-      user: 'example/getUser'
+      user: 'example/getUser',
+      access_token: 'auth/AccessToken'
     })
 
   },
   methods: {
     ...mapActions({
-      todo: 'example/getFolder'
+      todo: 'example/getFolder',
+      register: 'auth/registerUser'
     })
   },
-  mounted () {
-
+  async mounted () {
+    await this.register({
+      email: 'rezaser3774@gmail.com',
+      password: 'reza1234'
+    })
   }
 }
 </script>
 
 <style scoped>
-.page-container {
-  margin-top: 8em;
-}
-
 </style>

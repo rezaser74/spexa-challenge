@@ -1,6 +1,6 @@
 export default function () {
   return {
-    token: '',
-    refresh: ''
+    token: localStorage.getItem('token') || '',
+    refresh: localStorage.getItem('refresh') || ''
   }
 }

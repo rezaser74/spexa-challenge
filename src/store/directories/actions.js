@@ -8,9 +8,10 @@ export async function CreateDirectory (store, title, id) {
     body: JSON.stringify({ title })
   })
   const response = await res.json()
-  if (res.status === 401 && response.message.include('JWT')) {
+  if (response.message === 'jwt expired') {
     // when our response return 401 status or refreshToken will refresh token and callback our function again
-    store.dispatch('auth/refreshToken', await deleteDirectory(store, title, id), { root: true })
+    store.dispatch('auth/refreshToken', '', { root: true })
+    await deleteDirectory(store, title, id)
   }
   try {
     res = await res.json()
@@ -32,10 +33,13 @@ export async function getDirectory (store, id) {
     })
   })
   // handling 401 error
+
   const response = await res.json()
-  if (res.status === 401 && response.message.include('JWT')) {
+
+  if (response.message === 'jwt expired') {
     // when our response return 401 status or refreshToken will refresh token and callback our function again
-    store.dispatch('auth/refreshToken', await getDirectory(store, id), { root: true })
+    store.dispatch('auth/refreshToken', '', { root: true })
+    await getDirectory(store, id)
   }
 
   try {
@@ -60,9 +64,10 @@ export async function deleteDirectory (store, title, id) {
 
   })
   const response = await res.json()
-  if (res.status === 401 && response.message.include('JWT')) {
+  if (response.message === 'jwt expired') {
     // when our response return 401 status or refreshToken will refresh token and callback our function again
-    store.dispatch('auth/refreshToken', await deleteDirectory(store, title, id), { root: true })
+    store.dispatch('auth/refreshToken', '', { root: true })
+    await deleteDirectory(store, title, id)
   }
 
   try {

@@ -58,6 +58,8 @@ export async function refreshToken ({
     // callback as target request
     return await callBack()
   } catch (e) {
+    commit('setter', ['token', ''])
+    commit('setter', ['refresh', ''])
     return res.message
   }
 }

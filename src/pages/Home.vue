@@ -56,13 +56,8 @@ export default {
   methods: {
     ...mapActions({
       todo: 'example/getFolder',
-      register: 'auth/registerUser'
-    })
-  },
-  async mounted () {
-    await this.register({
-      email: 'rezaser3774@gmail.com',
-      password: 'reza1234'
+      register: 'auth/registerUser',
+      directory: 'directories/getDirectory'
     })
   }
 }

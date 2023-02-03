@@ -6,7 +6,7 @@
         <q-input v-model="name" dense outlined placeholder="title"/>
         <div class="row q-gutter-sm full-width">
           <q-btn v-close-popup color="black btn" dense outline>cancel</q-btn>
-          <q-btn class="q-px-xl" color="black" dense>Create</q-btn>
+          <q-btn @click.prevent="$store.dispatch('directories/CreateDirectory', this.name, this.id)" class="q-px-xl" color="black" dense >Create</q-btn>
         </div>
       </div>
     </q-dialog>
@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'CreateModal',
   props: {
@@ -26,9 +28,19 @@ export default {
       open: true
     }
   },
+  computed: {
+    ...mapGetters({
+      id: 'directories/rootId'
+    })
+  },
   watch: {
     'show' () {
       this.isOpen = !this.isOpen
+    }
+  },
+  methods: {
+    async create () {
+      console.log('hi')
     }
   }
 }

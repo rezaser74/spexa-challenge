@@ -1,13 +1,6 @@
 <template>
   <q-layout class="flex column full-width q-col-gutter-y-xl layout">
-    <q-header class="bg-white">
-      <q-toolbar class="q-ma-lg-xl">
-        <q-toolbar-title class="text-caption text-black ">
-          <q-btn outline color="black text-caption q-mr-md q-px-lg" dense>logout</q-btn>
-          {{ user }}
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-header>
+    <the-header/>
     <!--if there is no directory-->
     <CreateDirectory v-if=" !folders.directories.length"/>
     <Directories v-else :level="level" :folders="folders.directories" @add="addFolder()"/>
@@ -16,13 +9,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import CreateDirectory from 'components/CreateDirectory.vue'
 import Directories from 'components/Directories.vue'
+import TheHeader from 'components/Header.vue'
 
 export default {
   name: 'HomePage',
   components: {
+    TheHeader,
     Directories,
     CreateDirectory
   },
@@ -31,34 +26,34 @@ export default {
       level: 1,
       folders: {
         directories: [
-          {
-            id: 'JUZyOtKXSYW3-y2zpLf8rw',
-            title: 'test',
-            parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
-          },
-          {
-            id: 'JUZyOtKXSYW3-y2zpLf8rw',
-            title: 'music',
-            parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
-          }
-        ]
+          // {
+          //   id: 'JUZyOtKXSYW3-y2zpLf8rw',
+          //   title: 'test',
+          //   parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
+          // },
+          // {
+          //   id: 'JUZyOtKXSYW3-y2zpLf8rw',
+          //   title: 'music',
+          //   parent: 'MuAtC7ooQcWdKMMD8PnuqQ'
+          // }
+        ],
+        directoryList: []
       }
     }
   },
 
   computed: {
     ...mapGetters({
-      user: 'example/getUser',
-      access_token: 'auth/AccessToken'
+      access_token: 'auth/AccessToken',
+      getDirectoryList: 'directories/getDirList'
     })
-
   },
   methods: {
-    ...mapActions({
-      todo: 'example/getFolder',
-      register: 'auth/registerUser',
-      directory: 'directories/getDirectory'
-    })
+    // ...mapActions({
+    //   directory: 'directories/getDirectory'
+    // })
+  },
+  beforeMount () {
   }
 }
 </script>

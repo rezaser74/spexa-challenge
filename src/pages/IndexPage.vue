@@ -2,36 +2,42 @@
   <q-page class="flex flex-center">
     <div class="full-width  flex column items-center q-col-gutter">
       <span class="text-weight-bold text-center q-ma-lg">try the product out for free</span>
-      <q-form class="flex column items-center justify-center form q-col-gutter-y" @click.prevent="loginUser">
-        <q-input dense class="full-width" outlined v-model="data.email" type="email" placeholder="email"
-                 :rules="[val => !!val || 'Email is missing']"/>
-        <q-input dense class="full-width" outlined type="password" v-model="data.password" placeholder="password"
-                 :rules="[val=>!!val||'Password is missing']"/>
-        <q-btn type="submit" color="black" align="center" class="full-width">Login/Register</q-btn>
+      <q-form class="flex column items-center justify-center form q-col-gutter-y" @submit.prevent="loginUser">
+        <q-input v-model="data.email" :rules="[val => !!val || 'Email is missing']" class="full-width" dense outlined
+                 placeholder="email"
+                 type="email"/>
+        <q-input v-model="data.password" :rules="[val=>!!val||'Password is missing']" class="full-width" dense outlined
+                 placeholder="password"
+                 type="password"/>
+        <q-btn :disable="!data.email || !data.password" align="center" class="full-width" color="black" type="submit">
+          Login/Register
+        </q-btn>
       </q-form>
     </div>
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
-export default defineComponent({
-  name: 'IndexPage',
-  data () {
-    return {
-      data: {
-        email: '',
-        password: ''
-      }
-    }
-  },
-  methods: {
-    loginUser () {
-      this.$router.push('/directories')
-    }
-  }
+const store = useStore()
+const router = useRouter()
+const data = ref({
+  email: '',
+  password: ''
 })
+
+const loginUser = async () => {
+  const { value: userInfo } = data
+  const res = await store.dispatch('auth/registerUser', userInfo)
+  if (res.status === 1) {
+    await router.push('/directories/Home')
+  } else {
+    console.log(res.message)
+  }
+}
 </script>
 <style>
 .form {

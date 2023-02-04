@@ -1,9 +1,11 @@
 /* eslint-disable */
+import { Loading, Notify ,QSpinnerGears } from 'quasar'
+
 export async function CreateDirectory (store, {
   title,
   id
 }) {
-
+  Loading.show()
   const name = {
     'title': title
   }
@@ -28,9 +30,18 @@ export async function CreateDirectory (store, {
       id
     })
   }
+  if (response.message.includes('something is wrong')) {
+    await CreateDirectory(store, {
+      title,
+      id
+    })
+  }
+
   try {
     res = response
     await store.commit('setter', ['directories', res.data.directories])
+    Loading.hide()
+    Notify.create('Folder Created')
     return res
   } catch (e) {
     return res.message
@@ -38,6 +49,7 @@ export async function CreateDirectory (store, {
 }
 
 export async function getDirectory (store, id) {
+  Loading.show()
   let res = await fetch(`https://challenge.spexa.dev/directory/${id}`, {
     method: 'GET',
     mode: 'cors',
@@ -56,23 +68,33 @@ export async function getDirectory (store, id) {
     await store.dispatch('auth/refreshToken', '', { root: true })
     await getDirectory(store, id)
   }
+  if (response.message.includes('something is wrong')) {
+    Notify.create({
+      spinner: QSpinnerGears,
+      message: 'Working...',
+      timeout: 2000
+    })
+    await getDirectory(store, id)
+  }
 
   try {
     res = response
     await store.commit('setter', ['directories', res.data.directories])
+    Loading.hide()
     return res
   } catch (e) {
     console.log(res)
 
     return res.message
   }
+
 }
 
 export async function deleteDirectory (store, {
   title,
   id
 }) {
-  console.log(id)
+  Loading.show()
   const name = {
     'title': title
   }
@@ -94,15 +116,21 @@ export async function deleteDirectory (store, {
   if (response.message === 'jwt expired') {
     // when our response return 401 status or refreshToken will refresh token and callback our function again
     store.dispatch('auth/refreshToken', '', { root: true })
-    store.dispatch('getDirectory',parentId)
+    store.dispatch('getDirectory', parentId)
 
+  }
+  if (response.message.includes('something is wrong')) {
+    store.dispatch('getDirectory', parentId)
   }
 
   try {
     res = response
-    store.dispatch('getDirectory',parentId)
+    store.dispatch('getDirectory', parentId)
+    Loading.hide()
+    Notify.create('Folder Deleted')
     return res.data
   } catch {
     return res.message
   }
+
 }

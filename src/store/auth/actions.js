@@ -1,9 +1,17 @@
+/* eslint-disable */
+import {
+  Loading,Notify
+} from 'quasar'
+
+
 export async function registerUser ({ commit, state }, form) {
+  Loading.show()
   let res = await fetch('https://challenge.spexa.dev/user/login', {
     method: 'POST',
     mode: 'cors',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
     body: JSON.stringify(form)
   })
@@ -26,10 +34,11 @@ export async function registerUser ({ commit, state }, form) {
       // root directory id
       await commit('directories/setter', ['id', res.data.root_directory_id], { root: true })
     }
-    console.log(state)
+Loading.hide()
     return res
   } catch (e) {
-    console.log(e)
+Notify.create(res.message)
+    Loading.hide()
     return res
   }
 }
@@ -42,6 +51,7 @@ export async function registerUser ({ commit, state }, form) {
 * in directories
 */
 export async function refreshToken ({ state, commit }) {
+  Loading.show()
   console.log(state)
   let res = await fetch('https://challenge.spexa.dev/user/refresh', {
     method: 'POST',
@@ -59,6 +69,7 @@ export async function refreshToken ({ state, commit }) {
   try {
     commit('setter', ['token', res.data.access_token])
     commit('setter', ['refresh', res.data.refresh_token])
+    Loading.hide()
     // callback as target request
   } catch (e) {
     // commit('setter', ['token', ''])

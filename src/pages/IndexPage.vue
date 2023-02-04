@@ -17,25 +17,53 @@
   </q-page>
 </template>
 
-<script setup>
-import { ref } from 'vue'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+<script>
+/* eslint-disable */
+import {Notify} from 'quasar'
 
-const store = useStore()
-const router = useRouter()
-const data = ref({
-  email: '',
-  password: ''
+export default {
+  data () {
+    return {
+      data: {
+        email: '',
+        password: ''
+      },
+      userLists: []
+    }
+  },
+  methods: {
+    //login the form and push our user to json list
+    async submit () {
+      const res = await this.$store.dispatch('auth/registerUser', this.data)
+      if (res.status === 1) {
+        await this.$router.push('/directories/Home')
+        await this.$api.post('/users', {
+          id: Math.floor(Math.random() * 100) * (Date.now()),
+          email: this.data.email
+        })
+      } else {
+        console.log(res.message)
+      }
+    },
+    async loginUser () {
+      const Found = this.userLists.find(el => el.email === this.data.email) || null
+      if (!Found) {
+        await this.submit()
+      }
+      else {
+Notify.create({
+  message:'your user Exists Logging in...',
+  color: 'red',
+  spinner: true,
+  timeout:1000
+
 })
-
-const loginUser = async () => {
-  const { value: userInfo } = data
-  const res = await store.dispatch('auth/registerUser', userInfo)
-  if (res.status === 1) {
-    await router.push('/directories/Home')
-  } else {
-    console.log(res.message)
+        await this.submit()
+      }
+    }
+  },
+  mounted () {
+    this.$api.get('/users').then(res => this.userLists = res.data)
   }
 }
 </script>

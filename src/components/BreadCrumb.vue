@@ -27,6 +27,7 @@ export default {
       const Index = array.indexOf(item)
       const target = array.splice(0, (Index + 1))
       await this.$router.push(`/directories/${item.title}`)
+      await this.$store.commit('directories/setter', ['id', item.id])
       await this.$store.dispatch('directories/getDirectory', item.id)
       await this.$store.commit('directories/setBC', target)
     }

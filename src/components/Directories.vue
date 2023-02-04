@@ -40,7 +40,7 @@
             </div>
             <q-icon class="cursor-pointer" name="add" size="2em" @click="openAdd=!openAdd"></q-icon>
 
-            <create-modal :show="openAdd"/>
+            <create-modal :show="openAdd" />
             <delete-modal :show="openDel" :id="id" :title="title"/>
           </div>
         </div>
@@ -81,10 +81,11 @@ export default {
   },
   methods: {
 
-    openFolder (id, title) {
-      this.$store.dispatch('directories/getDirectory', id)
-      this.$store.commit('directories/pushToList', { title, id })
-      this.$router.push(`/directories/${title}`)
+    async openFolder (id, title) {
+      await this.$router.push(`/directories/${title}`)
+      await this.$store.dispatch('directories/getDirectory', id)
+      await this.$store.commit('directories/setter', ['id', id])
+      await this.$store.commit('directories/pushToList', { title, id })
     }
   },
   mounted () {

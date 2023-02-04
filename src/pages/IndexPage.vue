@@ -19,7 +19,7 @@
 
 <script>
 /* eslint-disable */
-import {Notify} from 'quasar'
+import { Notify } from 'quasar'
 
 export default {
   data () {
@@ -33,32 +33,40 @@ export default {
   },
   methods: {
     //login the form and push our user to json list
-    async submit () {
-      const res = await this.$store.dispatch('auth/registerUser', this.data)
-      if (res.status === 1) {
-        await this.$router.push('/directories/Home')
-        await this.$api.post('/users', {
-          id: Math.floor(Math.random() * 100) * (Date.now()),
-          email: this.data.email
-        })
-      } else {
-        console.log(res.message)
-      }
-    },
+
     async loginUser () {
       const Found = this.userLists.find(el => el.email === this.data.email) || null
       if (!Found) {
-        await this.submit()
-      }
-      else {
-Notify.create({
-  message:'your user Exists Logging in...',
-  color: 'red',
-  spinner: true,
-  timeout:1000
+        const res = await this.$store.dispatch('auth/registerUser', this.data)
+        if (res.status === 1) {
+          await this.$router.push('/directories/Home')
 
-})
-        await this.submit()
+        } else {
+          console.log(res.message)
+        }
+        if (res.message.includes('wrong')) {
+          await this.$api.post('/users', {
+            id: Math.floor(Math.random() * 100) * (Date.now()),
+            email: this.data.email
+          })
+        }
+      } else {
+
+        const res = await this.$store.dispatch('auth/registerUser', this.data)
+        if (res.status === 1) {
+          Notify.create({
+            message: 'your user Exists Logging in...',
+            color: 'red',
+            spinner: true,
+            timeout: 1000
+
+          })
+          await this.$router.push('/directories/Home')
+
+        } else {
+          console.log(res.message)
+        }
+
       }
     }
   },

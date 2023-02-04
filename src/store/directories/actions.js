@@ -115,11 +115,20 @@ export async function deleteDirectory (store, {
   const response = await res.json()
   if (response.message === 'jwt expired') {
     // when our response return 401 status or refreshToken will refresh token and callback our function again
+
     store.dispatch('auth/refreshToken', '', { root: true })
+    await  deleteDirectory (store, {
+      title,
+      id
+    })
     store.dispatch('getDirectory', parentId)
 
   }
   if (response.message.includes('something is wrong')) {
+    await  deleteDirectory (store, {
+      title,
+      id
+    })
     store.dispatch('getDirectory', parentId)
   }
 

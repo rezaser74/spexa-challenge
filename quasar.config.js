@@ -80,11 +80,16 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-devServer
     devServer: {
-      server: {
-        type: 'http'
-      },
-      port: 8080,
-      open: true // opens browser window automatically
+      https: true
+      // server: {
+      //   type: 'https', // NECESSARY
+      //   options: {
+      //     key: '/path/to/server.key',
+      //     pfx: '/path/to/server.pfx',
+      //     cert: '/path/to/server.crt',
+      //     ca: '/path/to/ca.pem'
+      //   }
+      // }
     },
 
     // https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-framework
